@@ -1,6 +1,7 @@
 package com.mohassan.noteappcleanarchitecture.feature_note.presentation.add_edit_note
 
 import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.toArgb
 import androidx.lifecycle.SavedStateHandle
@@ -9,11 +10,13 @@ import androidx.lifecycle.viewModelScope
 import com.mohassan.noteappcleanarchitecture.feature_note.domain.model.InvalidNoteException
 import com.mohassan.noteappcleanarchitecture.feature_note.domain.model.Note
 import com.mohassan.noteappcleanarchitecture.feature_note.domain.use_case.NoteUseCases
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@HiltViewModel
 class AddEditNoteViewModel @Inject constructor(
     private val noteUseCases: NoteUseCases,
     savedStateHandle: SavedStateHandle
@@ -33,11 +36,12 @@ class AddEditNoteViewModel @Inject constructor(
     )
     val noteContent: State<NoteTextFieldState> = _noteContent
 
-    private val _noteColor = mutableStateOf<Int>(Note.noteColor.random().toArgb())
+    private val _noteColor = mutableIntStateOf(Note.noteColor.random().toArgb())
     val noteColor: State<Int> = _noteColor
 
     private val _eventFlow = MutableSharedFlow<UiEvent>()
     val eventFlow = _eventFlow.asSharedFlow()
+
     private var currentNoteId: Int? = null
 
     init {
@@ -46,7 +50,6 @@ class AddEditNoteViewModel @Inject constructor(
                 viewModelScope.launch {
                     noteUseCases.getNote(noteId)?.also { note ->
                         currentNoteId = note.id
-
                         _noteTitle.value = noteTitle.value.copy(
                             text = note.title,
                             isHintVisible = false
@@ -55,15 +58,14 @@ class AddEditNoteViewModel @Inject constructor(
                             text = note.content,
                             isHintVisible = false
                         )
-                        _noteColor.value = note.color
+                        _noteColor.intValue = note.color
                     }
                 }
             }
         }
     }
 
-    suspend fun onEvent(event: AddEditNoteEvent) {
-
+    fun onEvent(event: AddEditNoteEvent) {
         when (event) {
             is AddEditNoteEvent.EnterTitle -> {
                 _noteTitle.value = noteTitle.value.copy(
@@ -88,27 +90,29 @@ class AddEditNoteViewModel @Inject constructor(
                 )
             }
             is AddEditNoteEvent.ChangeColor -> {
-                _noteColor.value = event.color
+                _noteColor.intValue = event.color
             }
-            AddEditNoteEvent.SaveNote -> {
-                try {
-                    noteUseCases.addNote(
-                        Note(
-                            title = noteTitle.value.text,
-                            content = noteContent.value.text,
-                            timestamp = System.currentTimeMillis(),
-                            color = noteColor.value,
-                            id = currentNoteId
+            is AddEditNoteEvent.SaveNote -> {
+                viewModelScope.launch {
+                    try {
+                        noteUseCases.addNote(
+                            Note(
+                                title = noteTitle.value.text,
+                                content = noteContent.value.text,
+                                timestamp = System.currentTimeMillis(),
+                                color = noteColor.value,
+                                id = currentNoteId
+                            )
                         )
-                    )
-                    _eventFlow.emit(UiEvent.SaveNote)
-                }
-                catch (e: InvalidNoteException){
-                    _eventFlow.emit(
-                        UiEvent.ShowSnackbar(
-                            message = e.message ?: "Couldn't save note"
+                        _eventFlow.emit(UiEvent.SaveNote)
+                    }
+                    catch (e: InvalidNoteException){
+                        _eventFlow.emit(
+                            UiEvent.ShowSnackbar(
+                                message = e.message ?: "Couldn't save note"
+                            )
                         )
-                    )
+                    }
                 }
             }
         }

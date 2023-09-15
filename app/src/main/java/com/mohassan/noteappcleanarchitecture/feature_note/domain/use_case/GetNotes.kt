@@ -16,7 +16,6 @@ class GetNotes(
 
         return repository.getNotes().map { notes ->
             when (noteOrder.orderType) {   // Ascending or Descending
-
                 is OrderType.Ascending -> {
                     when (noteOrder) {
                         is NoteOrder.Title -> notes.sortedBy { it.title.lowercase() }
@@ -24,7 +23,6 @@ class GetNotes(
                         is NoteOrder.Color -> notes.sortedBy { it.color }
                     }
                 }
-
                 is OrderType.Descending -> {
                     when (noteOrder) {
                         is NoteOrder.Title -> notes.sortedByDescending { it.title.lowercase() }
@@ -35,5 +33,4 @@ class GetNotes(
             }
         }
     }
-
 }

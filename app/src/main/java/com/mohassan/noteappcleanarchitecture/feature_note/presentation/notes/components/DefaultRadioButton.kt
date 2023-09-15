@@ -5,16 +5,12 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
-import androidx.compose.material3.RadioButtonColors
 import androidx.compose.material3.RadioButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.mohassan.noteappcleanarchitecture.feature_note.presentation.Greeting
-import com.mohassan.noteappcleanarchitecture.ui.theme.NoteAppCleanArchitectureTheme
 
 @Composable
 fun DefaultRadioButton(
@@ -23,7 +19,6 @@ fun DefaultRadioButton(
     onSelected: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-
     Row(
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically
@@ -37,19 +32,9 @@ fun DefaultRadioButton(
             )
         )
         Spacer(modifier = Modifier.width(8.dp))
-
         Text(
             text = text,
             style = MaterialTheme.typography.bodyLarge
         )
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultRadioButtonPreview() {
-    NoteAppCleanArchitectureTheme {
-
-        DefaultRadioButton(text = "hello", selected = true, onSelected = {})
     }
 }

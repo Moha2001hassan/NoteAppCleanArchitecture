@@ -23,12 +23,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.clipPath
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.ColorUtils
 import com.mohassan.noteappcleanarchitecture.feature_note.domain.model.Note
-import com.mohassan.noteappcleanarchitecture.ui.theme.NoteAppCleanArchitectureTheme
 
 @Composable
 fun NoteItem(
@@ -38,14 +36,11 @@ fun NoteItem(
     cutCornerSize: Dp = 30.dp,
     onDeleteClick: () -> Unit
 ) {
-
     Box(
         modifier = modifier
     ) {
 
-        Canvas(
-            modifier = Modifier.matchParentSize(),
-        ) {
+        Canvas(modifier = Modifier.matchParentSize()) {
             val clipPath = Path().apply {
                 lineTo(size.width - cutCornerSize.toPx(), 0f)
                 lineTo(size.width, cutCornerSize.toPx())
@@ -83,7 +78,6 @@ fun NoteItem(
                 overflow = TextOverflow.Ellipsis
             )
             Spacer(modifier = Modifier.height(8.dp))
-
             Text(
                 text = note.content,
                 style = MaterialTheme.typography.bodyLarge,
@@ -98,17 +92,9 @@ fun NoteItem(
         ) {
             Icon(
                 imageVector = Icons.Filled.Delete,
-                contentDescription = "Delete note"
+                contentDescription = "Delete note",
+                tint = MaterialTheme.colorScheme.onSurface
             )
-
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun NoteItemPreview() {
-    NoteAppCleanArchitectureTheme {
-        //NoteItem(note = Note)
     }
 }

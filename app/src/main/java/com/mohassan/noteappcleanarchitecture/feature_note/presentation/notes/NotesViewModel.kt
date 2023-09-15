@@ -10,7 +10,6 @@ import com.mohassan.noteappcleanarchitecture.feature_note.domain.util.NoteOrder
 import com.mohassan.noteappcleanarchitecture.feature_note.domain.util.OrderType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -54,7 +53,6 @@ class NotesViewModel @Inject constructor(
                     noteUseCases.addNote(recentlyDeletedNote ?: return@launch)
                     recentlyDeletedNote = null
                 }
-
             }
 
             is NotesEvent.ToggleOrderSection -> {
