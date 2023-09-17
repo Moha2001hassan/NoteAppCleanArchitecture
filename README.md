@@ -3,10 +3,11 @@ Clean Architecture Note App using (MVVM / CRUD / Jetpack Compose)
 
 ## I used in applicatin:
 
-- Room Database
 - Jetpack Compose
 - Clean Architecture
+- Room Database
 - MVVM
+- ViewModel
 - Coroutines
 - Dagger-Hilt
 - Use Cases
