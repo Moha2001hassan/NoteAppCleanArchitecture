@@ -6,7 +6,6 @@ Clean Architecture Note App using (MVVM / CRUD / Jetpack Compose)
 - Jetpack Compose
 - Clean Architecture
 - Room Database
-- MVVM
 - ViewModel
 - Coroutines
 - Dagger-Hilt
